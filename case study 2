@@ -1,0 +1,50 @@
+import re
+import base64
+
+
+# Function to validate Reference ID
+def validate_reference_id(ref_id):
+    # Check if the length is 12 and contains only valid characters (alphanumeric and special characters)
+    if len(ref_id) != 12:
+        return False
+    if not re.match(r'^[A-Za-z0-9@$#]+$', ref_id):
+        return False
+    return True
+
+
+# Function to encrypt Reference ID using base64
+def encrypt_reference_id(ref_id):
+    encoded_bytes = base64.b64encode(ref_id.encode("utf-8"))
+    encrypted_ref_id = str(encoded_bytes, "utf-8")
+    return encrypted_ref_id
+
+
+# Function to decrypt the encrypted Reference ID
+def decrypt_reference_id(encrypted_ref_id):
+    decoded_bytes = base64.b64decode(encrypted_ref_id)
+    decrypted_ref_id = str(decoded_bytes, "utf-8")
+    return decrypted_ref_id
+
+
+# Main Program
+if __name__ == "__main__":
+    # Read the Reference ID from the user
+    ref_id = input("Enter the 12-digit Reference ID: ")
+
+    # Check if Reference ID is valid
+    if not validate_reference_id(ref_id):
+        print(
+            "Invalid Reference ID. It must be 12 characters long and contain only letters, numbers, and special characters @$#.")
+    else:
+        # Encrypt the Reference ID
+        encrypted_id = encrypt_reference_id(ref_id)
+        print(f"Encrypted Reference ID: {encrypted_id}")
+
+        # Ask the user if they want to decrypt the ID
+        decrypt_choice = input("Do you want to decrypt the Reference ID? (yes/no): ")
+
+        if decrypt_choice.lower() == "yes":
+            decrypted_id = decrypt_reference_id(encrypted_id)
+            print(f"Decrypted Reference ID: {decrypted_id}")
+        else:
+            print("Decryption skipped.")
